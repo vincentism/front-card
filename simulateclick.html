@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.test {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: blue;
+			width: 10px;
+			height: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="test">
+		
+	</div>
+	<div style="background:red; width:180px; padding:10px;">
+	  <div id="out"></div>
+	  <input type="text">
+	</div>
+	<script>
+		 function imitateClick(oElement, iClientX, iClientY) {
+                var oEvent;
+                if (document.createEventObject) { //For IE
+                    oEvent = document.createEventObject();
+                    oEvent.clientX = iClientX;
+                    oEvent.clientY = iClientY;
+                    oElement.fireEvent("onclick", oEvent);   
+                } else {
+					oEvent = document.createEvent("MouseEvents");
+                	oEvent.initMouseEvent("click", false, false, document.defaultView, 0, 0, 0, 
+                                        iClientX, iClientY/*, false, false, false, false, 0, null*/); 
+                	oElement.dispatchEvent(oEvent);
+                }
+            }
+   
+            var body = document.body;
+            body.onclick = function(event) {
+            	event.stopPropagation();
+            	console.log(event);
+            	console.log(document.querySelector('.test'));
+            	var dt = event.target,stag = dt.tagName.toLowerCase();
+				document.getElementById("out").innerHTML = stag;
+            	// document.querySelector('.test').style. = event.clientY;
+            	document.querySelector('.test').style.top = event.clientY + 'px';
+            	document.querySelector('.test').style.left = event.clientX + 'px';
+                // alert("clicked at (" + event.clientX + "," + event.clientY + ")");
+            };
+
+            imitateClick(body, 30, 30);
+	</script>
+</body>
+</html>
+
